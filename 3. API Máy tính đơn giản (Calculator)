@@ -1,0 +1,31 @@
+package com.example.demo.controller;
+
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/calc")
+public class CalculatorController {
+
+    @GetMapping("/add")
+    public double add(@RequestParam double x, @RequestParam double y) {
+        return x + y;
+    }
+
+    @GetMapping("/subtract")
+    public double subtract(@RequestParam double x, @RequestParam double y) {
+        return x - y;
+    }
+
+    @GetMapping("/multiply")
+    public double multiply(@RequestParam double x, @RequestParam double y) {
+        return x * y;
+    }
+
+    @GetMapping("/divide")
+    public double divide(@RequestParam double x, @RequestParam double y) {
+        if (y == 0) {
+            throw new IllegalArgumentException("Cannot divide by zero!");
+        }
+        return x / y;
+    }
+}
