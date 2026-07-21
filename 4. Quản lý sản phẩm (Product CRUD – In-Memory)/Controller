@@ -1,0 +1,52 @@
+package com.example.demo.controller;
+
+import com.example.demo.model.Product;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicLong;
+
+@RestController
+@RequestMapping("/products")
+public class ProductController {
+
+    private final List<Product> products = new ArrayList<>();
+    private final AtomicLong idCounter = new AtomicLong(1);
+
+    @GetMapping
+    public List<Product> getAllProducts() {
+        return products;
+    }
+
+    @PostMapping
+    public Product createProduct(@RequestBody Product product) {
+        product.setId(idCounter.getAndIncrement());
+        products.add(product);
+        return product;
+    }
+
+    @GetMapping("/{id}")
+    public Product getProductById(@PathVariable Long id) {
+        return products.stream()
+                .filter(p -> p.getId().equals(id))
+                .findFirst()
+                .orElse(null);
+    }
+
+    @PutMapping("/{id}")
+    public Product updateProduct(@PathVariable Long id, @RequestBody Product updatedProduct) {
+        Product product = getProductById(id);
+        if (product != null) {
+            product.setName(updatedProduct.getName());
+            product.setPrice(updatedProduct.getPrice());
+        }
+        return product;
+    }
+
+    @DeleteMapping("/{id}")
+    public String deleteProduct(@PathVariable Long id) {
+        boolean removed = products.removeIf(p -> p.getId().equals(id));
+        return removed ? "Product removed successfully" : "Product not found";
+    }
+}
