@@ -1,0 +1,29 @@
+package com.example.demo.controller;
+
+import com.example.demo.model.Student;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicLong;
+
+@RestController
+@RequestMapping("/students")
+public class StudentController {
+
+    private final Map<Long, Student> studentMap = new HashMap<>();
+    private final AtomicLong idCounter = new AtomicLong(1);
+
+    @PostMapping
+    public Student createStudent(@RequestBody Student student) {
+        Long id = idCounter.getAndIncrement();
+        student.setId(id);
+        studentMap.put(id, student);
+        return student;
+    }
+
+    @GetMapping("/{id}")
+    public Student getStudent(@PathVariable Long id) {
+        return studentMap.get(id);
+    }
+}
