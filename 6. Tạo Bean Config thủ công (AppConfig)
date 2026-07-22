@@ -1,0 +1,15 @@
+package com.example.demo.config;
+
+import com.example.demo.service.GreetingService;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+public class AppConfig {
+
+    @Bean
+    public GreetingService customGreetingService() {
+        // Lưu ý: Nếu dùng cách này, hãy xoá annotation @Service ở class GreetingService
+        return new GreetingService();
+    }
+}
